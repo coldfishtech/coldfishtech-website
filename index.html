@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coldfish Technologies</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inria+Sans:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --text-size: 1rem;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      body {
+        font-family: "Inria Sans", sans-serif;
+        font-size: var(--text-size);
+        line-height: 1.7;
+        color: #111;
+        background: #fff;
+      }
+
+      main {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: clamp(2.5rem, 9vw, 7rem) clamp(1.25rem, 7vw, 5rem);
+      }
+
+      section + section {
+        margin-top: 3.5rem;
+      }
+
+      h1,
+      h2,
+      h3,
+      p,
+      a,
+      li,
+      span {
+        font-size: var(--text-size);
+      }
+
+      .about p + p,
+      .project p + p {
+        margin-top: 0.75rem;
+      }
+
+      .project {
+        margin-top: 0.5rem;
+      }
+
+      .link-with-icon {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
+      .project-link {
+        font-weight: 700;
+      }
+
+      .outlink-icon {
+        width: 1rem;
+        height: 1rem;
+        flex: 0 0 auto;
+      }
+
+      .project-image {
+        display: block;
+        width: 100%;
+        margin-top: 0.9rem;
+        border-radius: 0.4rem;
+      }
+
+      a {
+        color: inherit;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.15em;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="about" id="about">
+        <p>Coldfish Technologies is run by Sky Yoo (유새결).</p>
+        <p>
+          <a href="mailto:sky@coldfish.tech">sky@coldfish.tech</a><br />
+          <a class="link-with-icon" href="https://instagram.com/coldfishtech" target="_blank" rel="noreferrer">
+            @coldfishtech
+            <svg class="outlink-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3ZM5 5h6v2H7v10h10v-4h2v6H5V5Z"
+                fill="currentColor"
+              />
+            </svg>
+          </a>
+        </p>
+      </section>
+
+      <section id="projects">
+        <article class="project">
+          <a class="project-link link-with-icon" href="https://soar.coldfish.tech" target="_blank" rel="noreferrer">
+            SOAR
+            <svg class="outlink-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3ZM5 5h6v2H7v10h10v-4h2v6H5V5Z"
+                fill="currentColor"
+              />
+            </svg>
+          </a>
+          <img class="project-image" src="ssoar.png" alt="SOAR project preview image" loading="lazy" />
+          <p>
+            Vertical-scrolling jumper game for SOAR, a Seoul-based event series highlighting local and international
+            artists working with emotive Trance/Ambient music.
+          </p>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
