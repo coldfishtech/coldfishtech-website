@@ -16,6 +16,7 @@
         --text-size: 1rem;
         --bg-color: #fff;
         --fg-color: #111;
+        --muted-color: #4a4a4a;
         --matrix-fade: rgba(255, 255, 255, 0.08);
         --matrix-char: rgba(47, 79, 53, 0.10);
       }
@@ -24,6 +25,7 @@
         :root {
           --bg-color: #000;
           --fg-color: #fff;
+          --muted-color: #b8b8b8;
           --matrix-fade: rgba(0, 0, 0, 0.08);
           --matrix-char: rgba(198, 255, 158, 0.10);
         }
@@ -96,6 +98,17 @@
         font-weight: 700;
       }
 
+      .project-header {
+        display: flex;
+        align-items: baseline;
+        gap: 0.55rem;
+      }
+
+      .project-date {
+        margin-left: auto;
+        color: var(--muted-color);
+      }
+
       .outlink-icon {
         width: 1rem;
         height: 1rem;
@@ -141,15 +154,18 @@
 
       <section id="projects">
         <article class="project">
-          <a class="project-link link-with-icon" href="https://soar.coldfish.tech" target="_blank" rel="noreferrer">
-            <span class="content-bg">SOAR</span>
-            <svg class="outlink-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3ZM5 5h6v2H7v10h10v-4h2v6H5V5Z"
-                fill="currentColor"
-              />
-            </svg>
-          </a>
+          <p class="project-header">
+            <a class="project-link link-with-icon" href="https://soar.coldfish.tech" target="_blank" rel="noreferrer">
+              <span class="content-bg">SOAR</span>
+              <svg class="outlink-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3ZM5 5h6v2H7v10h10v-4h2v6H5V5Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </a>
+            <span class="project-date content-bg">2025.11</span>
+          </p>
           <img class="project-image" src="ssoar.png" alt="SOAR project preview image" loading="lazy" />
           <p><span class="content-bg">Vertical-scrolling jumper game for SOAR, a Seoul-based event series highlighting local and international artists working with emotive Trance/Ambient music.</span></p>
         </article>
