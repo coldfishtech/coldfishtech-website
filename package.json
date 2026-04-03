@@ -1,0 +1,25 @@
+{
+  "name": "coldfishtech-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "mkdir -p dist && html-minifier-terser index.html -o dist/index.html --collapse-whitespace --minify-css true --minify-js true",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coldfishtech/coldfishtech-website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/coldfishtech/coldfishtech-website/issues"
+  },
+  "homepage": "https://github.com/coldfishtech/coldfishtech-website#readme",
+  "devDependencies": {
+    "html-minifier-terser": "^7.2.0"
+  }
+}
