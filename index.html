@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Coldfish Technologies</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -13,6 +14,19 @@
     <style>
       :root {
         --text-size: 1rem;
+        --bg-color: #fff;
+        --fg-color: #111;
+        --matrix-fade: rgba(255, 255, 255, 0.08);
+        --matrix-char: rgba(0, 0, 0, 0.10);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg-color: #000;
+          --fg-color: #fff;
+          --matrix-fade: rgba(0, 0, 0, 0.08);
+          --matrix-char: rgba(255, 255, 255, 0.10);
+        }
       }
 
       * {
@@ -24,11 +38,23 @@
         font-family: "Inria Sans", sans-serif;
         font-size: var(--text-size);
         line-height: 1.7;
-        color: #111;
-        background: #fff;
+        color: var(--fg-color);
+        background: var(--bg-color);
+        min-height: 100vh;
+      }
+
+      #matrix-rain {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 0;
       }
 
       main {
+        position: relative;
+        z-index: 1;
         max-width: 600px;
         margin: 0 auto;
         padding: clamp(2.5rem, 9vw, 7rem) clamp(1.25rem, 7vw, 5rem);
@@ -53,8 +79,11 @@
         margin-top: 0.75rem;
       }
 
-      .project {
-        margin-top: 0.5rem;
+      .content-bg {
+        background: var(--bg-color);
+        padding: 0 0.22em;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
       }
 
       .link-with-icon {
@@ -80,6 +109,10 @@
         border-radius: 0.4rem;
       }
 
+      .project-image + p {
+        margin-top: 0.85rem;
+      }
+
       a {
         color: inherit;
         text-decoration-thickness: 1px;
@@ -88,13 +121,14 @@
     </style>
   </head>
   <body>
+    <canvas id="matrix-rain" aria-hidden="true"></canvas>
     <main>
       <section class="about" id="about">
-        <p>Coldfish Technologies is run by Sky Yoo (유새결).</p>
+        <p><span class="content-bg">Coldfish Technologies is run by Sky Yoo (유새결).</span></p>
         <p>
-          <a href="mailto:sky@coldfish.tech">sky@coldfish.tech</a><br />
+          <a href="mailto:sky@coldfish.tech"><span class="content-bg">sky@coldfish.tech</span></a><br />
           <a class="link-with-icon" href="https://instagram.com/coldfishtech" target="_blank" rel="noreferrer">
-            @coldfishtech
+            <span class="content-bg">@coldfishtech</span>
             <svg class="outlink-icon" viewBox="0 0 24 24" aria-hidden="true">
               <path
                 d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3ZM5 5h6v2H7v10h10v-4h2v6H5V5Z"
@@ -108,7 +142,7 @@
       <section id="projects">
         <article class="project">
           <a class="project-link link-with-icon" href="https://soar.coldfish.tech" target="_blank" rel="noreferrer">
-            SOAR
+            <span class="content-bg">SOAR</span>
             <svg class="outlink-icon" viewBox="0 0 24 24" aria-hidden="true">
               <path
                 d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3ZM5 5h6v2H7v10h10v-4h2v6H5V5Z"
@@ -117,12 +151,93 @@
             </svg>
           </a>
           <img class="project-image" src="ssoar.png" alt="SOAR project preview image" loading="lazy" />
-          <p>
-            Vertical-scrolling jumper game for SOAR, a Seoul-based event series highlighting local and international
-            artists working with emotive Trance/Ambient music.
-          </p>
+          <p><span class="content-bg">Vertical-scrolling jumper game for SOAR, a Seoul-based event series highlighting local and international artists working with emotive Trance/Ambient music.</span></p>
         </article>
       </section>
     </main>
+    <script>
+      (() => {
+        const canvas = document.getElementById("matrix-rain");
+        const ctx = canvas.getContext("2d");
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()[]{}<>+-*/=";
+        const fontSize = 11;
+        const columnStep = fontSize * 0.5;
+        const frameStep = 45;
+        let columns = 0;
+        let drops = [];
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        let lastFrame = 0;
+        let matrixFade = "rgba(255, 255, 255, 0.08)";
+        let matrixChar = "rgba(0, 0, 0, 0.10)";
+
+        function randomChar() {
+          return chars[Math.floor(Math.random() * chars.length)];
+        }
+
+        function syncThemeColors() {
+          const styles = window.getComputedStyle(document.documentElement);
+          matrixFade = styles.getPropertyValue("--matrix-fade").trim() || matrixFade;
+          matrixChar = styles.getPropertyValue("--matrix-char").trim() || matrixChar;
+        }
+
+        function resize() {
+          width = window.innerWidth;
+          height = window.innerHeight;
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          canvas.width = Math.floor(width * dpr);
+          canvas.height = Math.floor(height * dpr);
+          canvas.style.width = width + "px";
+          canvas.style.height = height + "px";
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          ctx.font = `${fontSize}px monospace`;
+          columns = Math.ceil(width / columnStep);
+          drops = Array.from({ length: columns }, () => Math.random() * height);
+          ctx.clearRect(0, 0, width, height);
+        }
+
+        function drawFrame() {
+          ctx.fillStyle = matrixFade;
+          ctx.fillRect(0, 0, width, height);
+          ctx.fillStyle = matrixChar;
+
+          for (let i = 0; i < columns; i += 1) {
+            const x = i * columnStep;
+            const y = drops[i];
+            ctx.fillText(randomChar(), x, y);
+
+            if (y > height && Math.random() > 0.975) {
+              drops[i] = Math.random() * -height * 0.35;
+            } else {
+              drops[i] += fontSize * (0.85 + Math.random() * 0.5);
+            }
+          }
+        }
+
+        function animate(timestamp) {
+          if (prefersReducedMotion) {
+            return;
+          }
+          if (timestamp - lastFrame >= frameStep) {
+            lastFrame = timestamp;
+            drawFrame();
+          }
+          window.requestAnimationFrame(animate);
+        }
+
+        syncThemeColors();
+        resize();
+        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+          syncThemeColors();
+        });
+        window.addEventListener("resize", resize);
+        if (!prefersReducedMotion) {
+          window.requestAnimationFrame(animate);
+        } else {
+          drawFrame();
+        }
+      })();
+    </script>
   </body>
 </html>
